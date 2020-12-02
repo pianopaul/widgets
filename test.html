@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Status Bar HTML</title>
+
+<style>
+body {
+	margin: 0 40px;
+	padding: 0;
+	font-family: "Open Sans", "Open Sans MS", Arial, "sans-serif";
+}
+h1.SP-heading {
+	font-weight: 600;
+	font-size: 16px;
+	letter-spacing: .2px;
+	color: #009367;
+}
+	
+.diskMaxInfo {
+	position: relative;
+	white-space: nowrap;
+}
+.diskMaxInfo span {
+	display: inline-block;
+	font-size: 14px;
+}
+#diskMaxStatus {
+	font-size: 16px;
+	font-weight: bold;
+}
+#statbarHTML {    
+	margin: 0 0 15px 0;
+	border-radius: 5px;
+    border: 1px solid #dfe1e5;
+	background-image: url("grayStripes-60x60.gif");
+    box-shadow: ;
+    height: 40px;
+    width: 800px;
+	position: relative;
+}
+#hdstatbar{
+	border-radius: 5px;
+    border: 1px solid transparent;
+	background: none;
+    box-shadow: ;
+    height: 40px;
+    width: 800px;
+	position:absolute;
+	left: 0;
+	top: -1px;
+	overflow: hidden;
+}
+.hdstatbar-wrapfix {
+	width: 3000px;
+	height: 40px;
+	overflow: hidden;
+}
+#data-spectra, #data-logs, #data-system, #yellowBar, #redBar {
+	position: relative;
+	float: left;
+	width: 0;
+	height: 40px;
+	transition: width .6s;
+}
+#data-spectra {
+	border-radius: 5px;
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+	background-color: aqua;
+	width: 80px;
+}
+#data-logs {
+	background-color:coral;
+	width: 150px;
+}
+#data-system {
+	background-color:darkorchid;
+	width: 50px;
+}
+#yellowBar, #redBar {
+	display: none;
+	width: 100%;
+	position:absolute;
+	left: 0;
+	top: 0px;
+	height: 5px;
+	z-index: 2;
+}
+#yellowSetting, #redSetting {
+	width: 3px;
+	height: 40px;
+	position: absolute;
+    top: 0;
+}
+#yellowBar, #yellowSetting {
+	background-color:gold;
+}
+#redBar, #redSetting {
+	background-color:red;
+}
+#yellowSetting {
+	left: 72%; 
+}
+#redSetting {
+	left: 90%;
+}
+#yellowMsg, #redMsg {
+	position: absolute;
+	top: -27px;
+	right: 0;
+	padding: 2px 5px;
+	display: none;
+	font-size: 14px;
+}
+#yellowMsg {
+	background-color:lightgoldenrodyellow; 
+}
+#redMsg {
+	border: 2px red solid; 
+	border-radius: 4px;
+}
+#yellowWarnLevel, #redWarnLevel {
+	font-weight: bold;
+	font-size: 16px;
+}
+/* stat bar legend color chips and values */
+	
+#statbarLegend {
+	margin: 0;
+	display: flex;
+	min-width: 800px;
+	min-height: 200px;
+	flex-basis: auto; /* default value */
+	flex-grow: 1;
+}
+.colorChip {
+	width: 40px;
+	min-width: 40px;
+	height: 40px;
+	background-color: #ddd;
+	border-radius: 6px;
+}
+.chipSpectra {
+	background-color: aqua;
+}
+.chipLogs {
+	background-color: coral;
+}
+.chipSystem {
+	background-color: darkorchid;
+}
+.chipAvailable {
+	background-color: transparent;
+	background-image: url("grayStripes-60x60.gif");
+	border: 1px #ddd solid;
+}
+.legendStats {
+	display: flex;
+	flex-direction: column;
+	margin-right: 15px;
+	min-width: 150px; 
+}
+.stat1 {
+	font-size: 13px;
+	white-space: nowrap;
+	text-indent: 10px;
+}
+span.seeVal {
+	font-size: 16px;
+	font-weight: bold;
+	color: #333;
+}
+.stat2 {
+	font-size: 13px;
+	padding-left: 25px;
+}
+
+#statbarLegend {
+	 flex: 1;
+}
+
+/* Demo refresh data styles */
+
+#buttonGetData {
+	margin: 10px 0 30px 0;
+	height: 36px;
+	padding: 0 15px;
+	background: white;
+	border-radius: 5px;
+	cursor: pointer;
+} 
+#buttonGetData:hover {
+	-webkit-box-shadow: 1px 1px 4px 1px rgba(90,90,90,0.4); 
+	box-shadow: 1px 1px 4px 1px rgba(90,90,90,0.4);
+}
+	
+</style>
+	
+</head>
+
+<body>
+	
+<h1 class="SP-heading">Disk Management</h1>
+
+<button id="buttonGetData">Click to refresh sample data</button>
+	
+<div class="diskMaxInfo">
+	<span>Disk Capacity:&nbsp;</span><span id="diskMaxStatus">1060</span><span>&nbsp;GB</span>	
+</div>
+	
+<div id="statbarHTML">
+	<div id="hdstatbar">
+		<div class="hdstatbar-wrapfix">
+			<div id="data-spectra" style="width: 257.245px;"></div>
+			<div id="data-logs" style="width: 78.0058px;"></div>
+			<div id="data-system" style="width: 63.933px;"></div>
+			<div id="yellowBar" style="display: none;"></div>
+			<div id="redBar" style="display: none;"></div>
+		</div>			
+		<div id="yellowSetting"></div>
+		<div id="redSetting"></div>
+	</div>		
+	<div id="yellowMsg" style="display: none;">
+		<div class="warningMessage"><span id="icon-warn-yellow"></span><b>Warning: </b>Data has exceeded&nbsp;<span id="yellowWarnLevel">72</span><span>&nbsp;% of Disk.</span></div>
+	</div>
+	<div id="redMsg" style="display: none;">
+		<div class="warningMessage"><span id="icon-warn-red"></span><b>Alert: </b>Data has exceeded&nbsp;<span id="redWarnLevel">90</span><span>&nbsp;% of Disk!</span></div>
+	</div>
+</div>
+	
+<div id="statbarLegend">
+	<div class="colorChip chipSpectra"></div>
+	<div class="legendStats">
+		<div class="stat1">Spectra Data: <span id="percentSpectra" class="seeVal">32.08</span>&nbsp;%</div>
+		<div class="stat2"><span id="gbSpectra" class="seeVal">340.00</span>&nbsp;GB</div>
+	</div>
+	<div class="colorChip chipLogs"></div>
+	<div class="legendStats">
+		<div class="stat1">Logs Data: <span id="percentLogs" class="seeVal">9.73</span>&nbsp;%</div>
+		<div class="stat2"><span id="gbLogs" class="seeVal">103.10</span>&nbsp;GB</div>
+	</div>
+	<div class="colorChip chipSystem"></div>
+	<div class="legendStats">
+		<div class="stat1">System: <span id="percentSystem" class="seeVal">7.97</span>&nbsp;%</div>
+		<div class="stat2"><span id="gbSystem" class="seeVal">84.50</span>&nbsp;GB</div>
+	</div>
+	<div class="colorChip chipAvailable"></div>
+	<div class="legendStats">
+		<div class="stat1">Available: <span id="percentAvailable" class="seeVal">50.23</span>&nbsp;%</div>
+		<div class="stat2"><span id="gbAvailable" class="seeVal">532.40</span>&nbsp;GB</div>
+	</div>
+</div>
+
+<script>
+
+// stat bar widths
+var dspectra = document.getElementById("data-spectra");
+var dlogs = document.getElementById("data-logs");
+var dsystem = document.getElementById("data-system");
+// legend stats
+var percentSpectra = document.getElementById("percentSpectra");
+var gbSpectra = document.getElementById("gbSpectra");
+var percentLogs = document.getElementById("percentLogs");
+var gbLogs = document.getElementById("gbLogs");
+var percentSystem = document.getElementById("percentSystem");
+var gbSystem = document.getElementById("gbSystem");
+var percentAvailable = document.getElementById("percentAvailable");
+var gbAvailable = document.getElementById("gbAvailable");
+	
+// demo data //	
+document.getElementById("buttonGetData").addEventListener("click", refreshData);
+// SETTING for diskMax - set Hard Disk size in GBs here, will echo in view.
+var diskMax = 1060; 
+var diskMaxStatus = document.getElementById("diskMaxStatus");
+diskMaxStatus.innerHTML = diskMax;
+	
+// SETTING for warnings yellow and red, set here for now
+var yellowWarningPercentage = 72;
+var redWarningPercentage = 90;
+document.getElementById("yellowWarnLevel").innerHTML = yellowWarningPercentage;
+document.getElementById("redWarnLevel").innerHTML = redWarningPercentage;
+	
+var yellowBar = document.getElementById("yellowBar");
+var redBar = document.getElementById("redBar");
+var yellowSetting = document.getElementById("yellowSetting");
+var redSetting = document.getElementById("redSetting");
+
+
+// SETTING - reads statbarwidth from width which is SET in CSS
+var statbarwidth = document.getElementById("hdstatbar").offsetWidth;
+	
+var id = 0;	
+function refreshData(){
+	// sampleData here is array of disk space in GBs, taken by: [spectra_db, logs_db, system_data].
+	var sampleData = [
+    [250,350.8,80],
+    [80.1,654.22,84.2],
+	[340,103.1,84.5],
+	[113.8,598,92.12],
+	[223.34,502.33,101.5],
+	[354.8,532,96.5]
+	];
+
+	var gs = sampleData[id][0];
+	var gl = sampleData[id][1];
+	var gsy = sampleData[id][2];
+	var gav = diskMax - (gs + gl + gsy);
+	
+	gbSpectra.innerHTML = gs.toFixed(2);
+	gbLogs.innerHTML = gl.toFixed(2);
+	gbSystem.innerHTML = gsy.toFixed(2);
+	gbAvailable.innerHTML = gav.toFixed(2);
+	
+	var ps = getPercentage(gs);
+	var pl = getPercentage(gl);
+	var psy = getPercentage(gsy);
+	var pTotal = (ps + pl + psy);
+	var pav = 100 - pTotal;
+	
+	percentSpectra.innerHTML = ps.toFixed(2);
+	percentLogs.innerHTML = pl.toFixed(2);
+	percentSystem.innerHTML = psy.toFixed(2);
+	percentAvailable.innerHTML = pav.toFixed(2);
+	
+	dspectra.style.width = ps / 100 * statbarwidth + "px";
+	dlogs.style.width = pl / 100 * statbarwidth + "px";
+	dsystem.style.width = psy / 100 * statbarwidth + "px";
+	
+// Warnings
+	
+	if(pTotal > redWarningPercentage){
+		yellowBar.style.display = "none";
+		redBar.style.display = "block";
+		yellowMsg.style.display = "none";
+		redMsg.style.display = "block";
+		
+	}
+	else if(pTotal > yellowWarningPercentage && pTotal < redWarningPercentage){
+		yellowBar.style.display = "block";
+		redBar.style.display = "none";
+		yellowMsg.style.display = "block";
+		redMsg.style.display = "none";
+	}
+	else {
+		yellowBar.style.display = "none";
+		redBar.style.display = "none";
+		yellowMsg.style.display = "none";
+		redMsg.style.display = "none";
+	}
+	
+	id++;
+	if(id == 6){id = 0};
+
+}
+
+function getPercentage(n){
+	return 100 - (((diskMax - n) / diskMax) * 100);
+}
+	
+</script>
+	
+</body>
+</html>
